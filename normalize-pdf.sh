@@ -2,6 +2,13 @@
 
 set -e
 
-pdfjam --outfile "$1.2.pdf" --paper a4paper "$1"
-convert "$1.2.pdf" "$1"
-rm "$1.2.pdf"
+gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 \
+  -dPDFSETTINGS="/ebook" -sOutputFile="$1.temp.pdf" "$1"
+
+pdfjam --outfile "$1.temp2.pdf" --paper a4paper "$1.temp.pdf"
+
+gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 \
+  -dPDFSETTINGS="/ebook" -sOutputFile="$1.normalized.pdf" "$1.temp2.pdf"
+
+rm "$1.temp.pdf"
+rm "$1.temp2.pdf"
